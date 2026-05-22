@@ -377,6 +377,53 @@ body{
   100%{transform:translateY(-120px) rotate(720deg);opacity:0;}
 }
 
+/* ===== TE AMO OVERLAY ===== */
+#teAmoOverlay{
+  position:fixed;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:999;
+  pointer-events:none;
+  opacity:0;
+}
+#teAmoOverlay.show{
+  animation:teAmoAnim 3.2s ease-in-out forwards;
+}
+@keyframes teAmoAnim{
+  0%  {opacity:0; transform:scale(0.4);}
+  18% {opacity:1; transform:scale(1.08);}
+  35% {opacity:1; transform:scale(1);}
+  75% {opacity:1; transform:scale(1);}
+  100%{opacity:0; transform:scale(1.15);}
+}
+.te-amo-text{
+  font-family:'Dancing Script',cursive;
+  font-size:clamp(48px,12vw,96px);
+  font-weight:700;
+  text-align:center;
+  line-height:1.2;
+  background:linear-gradient(135deg,#ff4da6,#c2185b,#e91e8c,#ff80b5,#9c27b0);
+  background-size:200% auto;
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+  animation:teAmoShimmer 1s linear infinite;
+  filter:drop-shadow(0 0 20px rgba(233,30,140,0.6)) drop-shadow(0 0 40px rgba(233,30,140,0.3));
+  letter-spacing:2px;
+  padding:0 20px;
+}
+@keyframes teAmoShimmer{
+  0%{background-position:0% center;}
+  100%{background-position:200% center;}
+}
+.te-amo-hearts{
+  position:absolute;
+  font-size:clamp(24px,5vw,40px);
+  animation:teAmoAnim 3.2s ease-in-out forwards;
+}
+
 /* ===== EXPLOSIÓN DE CORAZONES ===== */
 .heart-burst{
   position:absolute;
@@ -413,6 +460,17 @@ body{
   <button class="music-btn" id="musicBtn" onclick="toggleMusic()">▶</button>
   <span class="music-label">Música ♡</span>
   <span class="music-notes" id="musicNote">🎵</span>
+</div>
+
+<!-- TE AMO overlay -->
+<div id="teAmoOverlay">
+  <span class="te-amo-hearts" style="top:10%;left:5%">💖</span>
+  <span class="te-amo-hearts" style="top:15%;right:6%">🌸</span>
+  <span class="te-amo-hearts" style="bottom:12%;left:8%">💕</span>
+  <span class="te-amo-hearts" style="bottom:10%;right:5%">✨</span>
+  <span class="te-amo-hearts" style="top:40%;left:2%">🎀</span>
+  <span class="te-amo-hearts" style="top:40%;right:2%">💗</span>
+  <div class="te-amo-text">💌 TE AMO<br>AMORCITO ARA 💌</div>
 </div>
 
 <div class="scene">
@@ -708,6 +766,8 @@ function openEnvelope(){
     letter.classList.add('visible');
     burstHearts();
     startLetterParticles();
+    showTeAmo();
+    if(!musicPlaying){ toggleMusic(); }
   }, 600);
 }
 
@@ -720,6 +780,14 @@ function closeEnvelope(){
     env.classList.remove('open');
     document.getElementById('hint').style.display = 'block';
   }, 500);
+}
+
+function showTeAmo(){
+  const el = document.getElementById('teAmoOverlay');
+  el.classList.remove('show');
+  void el.offsetWidth; // reflow para reiniciar animación
+  el.classList.add('show');
+  setTimeout(()=> el.classList.remove('show'), 3300);
 }
 
 function burstHearts(){
